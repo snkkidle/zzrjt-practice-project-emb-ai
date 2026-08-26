@@ -2,6 +2,9 @@
 # import requests library
 import requests
 
+# Import json library for parsing the response text
+import json
+
 # Analyzer URL Constant
 ANALYZER_URL = 'https://sn-watson-sentiment-bert.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/SentimentPredict'
 
@@ -16,7 +19,9 @@ def text_to_analyze(text):
     # Make the request call
     response = requests.post(ANALYZER_URL, json = inputJson, headers = HEADERS)
     if(response.status_code == 200):
-        return response.text
+        analyzed_text = response.text
+        formatted_response = json.loads(analyzed_text)
+        return formatted_response['documentSentiment']['label']
     
     # Handle Exception    
     raise Exception("Something Went Wrong")
